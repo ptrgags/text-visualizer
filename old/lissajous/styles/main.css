@@ -1,0 +1,13 @@
+﻿body {
+    background-color:   #000000;
+    overflow:           hidden;
+    text-align:         center;
+}
+h1 {
+    font-family:    sans-serif;
+    color:          #ffffff;
+}
+div.title {
+    position:   absolute;
+    top:        0;
+}

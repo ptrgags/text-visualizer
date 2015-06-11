@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Text Visualizer</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <!-- Libraries -->
+    <script src="scripts/graphics.js"></script>
+    <script src="scripts/dom.js"></script>
+    <script src="scripts/sha1.js"></script>
+    <!-- Classes -->
+    <script src="scripts/FrameTimer.js"></script>
+    <script src="scripts/Dimensions.js"></script>
+    <script src="scripts/Plugin.js"></script>
+    <!--Test Animation -->
+    <script src="scripts/test/TestAnimation.js"></script>
+    <!-- Page controls -->
+    <script src="scripts/control.js"></script>
+</head>
+<body onload="init();" onresize="resize();">
+    <div>
+        <input id="inputField" type="text" />
+        <button id="submitButton" onclick="submit();">Visualize</button>
+        <button id="randomButton" onclick="submitRandom();">Random</button>
+        <select id="animation" onchange="changeAnimation();">
+            <option>Test Animation</option>
+            <option>Alchemy</option>
+        </select><br />
+        <div>
+            <canvas id="canvas">
+                Error: Your device does not support HTML5. Try Google Chrome.
+            </canvas>
+            <div class="title">
+                <h1 id="title">Text Visualizer</h1>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
