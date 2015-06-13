@@ -8,5 +8,4 @@ deploy:
 	\cp -r $(PROJECTS) $(DEST)
 
 clean:
-	\rm -r $(DEST)lissajous/
-	\rm -r $(DEST)alchemy/
+	\rm -r $(foreach proj, $(PROJECTS), $(DEST)$(proj)/)
