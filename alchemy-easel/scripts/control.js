@@ -24,10 +24,10 @@ function update() {
     else {
         delayFrame = 0;
         frame = 0;
-        if (animationPhase < animationPhaseMax)
-            animationPhase++;
-        else
-            animationPhase = 0;
+
+		//Cycle to the next phase
+		animationPhase++;
+		animationPhase %= PHASES.length;
     }
     render();
 }
@@ -42,7 +42,7 @@ function reset() {
     dimensions.OUTER_RADIUS = Math.min(canvas.width, canvas.height) * 2 / 5;
     dimensions.INNER_RADIUS = dimensions.OUTER_RADIUS * 8 / 10;
 
-
+/*
     //Transition 1:
     //outerShapeOn = true
     //outerShape = SHAPE_SQUARE
@@ -119,7 +119,7 @@ function reset() {
         new PolarPoint(dimensions.OUTER_RADIUS, Math.PI / 6, Math.PI),
         new PolarPoint(dimensions.OUTER_RADIUS, 5 * Math.PI / 6, Math.PI),
         new PolarPoint(dimensions.OUTER_RADIUS, 3 * Math.PI / 2, Math.PI)
-    ];
+    ]; */
 
     frame = 0;
     animationPhase = 0;
@@ -131,6 +131,16 @@ function rotatePoints(points, percent) {
         points[i].theta = -(points[i].thetaMin + (points[i].thetaMax - points[i].thetaMin) * (Math.min(percent, 1)));
         points[i].toRect();
     }
+}
+
+
+function getRadius(ring) {
+	if (ring == 'outer')
+		return dimensions.OUTER_RADIUS;
+	else if (ring == 'inner')
+		return dimensions.INNER_RADIUS;
+	else
+		return 0;
 }
 
 function render() {
@@ -145,6 +155,45 @@ function render() {
     context.shadowBlur = 20;
     context.shadowColor = "#FFFFFF";
 
+	phase = PHASES[animationPhase];
+	for (var i in phase) {
+		drawInstruction = phase[i];
+		drawStyle = drawInstruction[0];
+		shape = drawInstruction[1];
+		ring = drawInstruction[2];
+		radius = getRadius(ring);
+
+		if (drawStyle == 'static') {
+			if (shape == 'shape')
+				drawShape(context, drawInstruction[3], radius);
+			else if (shape == 'arc')
+				drawArc(context, drawInstruction[3], radius);
+			else if (shape == 'shape-diag')
+				console.log("TODO: Shapes with Diagonals!");
+			else if (shape == 'shape-rads')
+				console.log("TODO: Shapes with radials!");
+			else
+				console.error("Invalid Data");
+		}
+		else if (drawStyle == 'anim') {
+			if (shape == 'shape')
+				console.log("TODO: Animated Shapes!");
+			else if (shape == 'arc')
+				console.log("TODO: Animated Arcs!");
+			else if (shape == 'shape-diag')
+				console.log("TODO: Animated Shapes with Diagonals!");
+			else if (shape == 'shape-rad')
+				console.log("TODO: Animated Shapes with radials!");
+			else
+				console.error("Invalid Animated Data: " + shape);
+			
+		}
+		else if (drawStyle == 'anim-rev') {
+			console.log("TODO: Reversed animation!");
+		}
+	}
+
+/*
     switch (animationPhase) {
         case 0:
             drawCircle(context, dimensions.OUTER_RADIUS, 0, getPercent());
@@ -202,7 +251,7 @@ function render() {
             drawCircle(context, dimensions.OUTER_RADIUS, 0, getInversePercent());
             drawCircle(context, dimensions.INNER_RADIUS, Math.PI, getInversePercent());
             break;
-    }
+    } */
 }
 
 function getPercent() {
@@ -219,6 +268,36 @@ function drawCircle(context, radius, startAngle, percent) {
     context.stroke();
 }
 
+function drawArc(context, points, radius) {
+	x = dimensions.CENTER_X;
+	y = dimensions.CENTER_Y;
+	start = points[0] * 2 * Math.PI;
+	stop = start - (points[1] * 2 * Math.PI);
+	context.beginPath();
+	context.arc(x, y, radius, start, stop, true);
+	context.stroke();
+}
+
+//Draw a shape
+//Context - the drawing context
+//Points - a list of polar coordinates as an array
+function drawShape(context, points, radius) {
+	context.beginPath();
+	for (var i = 0; i < points.length; i++) {
+		theta = points[i] * 2 * Math.PI;
+		point = toRect([radius, theta]);
+		x = dimensions.CENTER_X + point[0];
+		y = dimensions.CENTER_Y + point[1];
+		if (i == 0)
+			context.moveTo(x, y);
+		else
+			context.lineTo(x, y);
+	}
+		context.closePath();
+		context.stroke();
+}
+
+/*
 function drawShape(context, points, percent) {
     rotatePoints(points, percent);
     context.beginPath();
@@ -227,7 +306,7 @@ function drawShape(context, points, percent) {
         context.lineTo(dimensions.CENTER_X + points[i].x, dimensions.CENTER_Y + points[i].y);
     context.closePath();
     context.stroke();
-}
+}*/
 
 function drawRadials(context, points, percent) {
     rotatePoints(points, percent);
