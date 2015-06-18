@@ -7,7 +7,7 @@ all: deploy
 
 deploy: build
 	\cp -r $(PROJECTS) $(DEST)
-	./dependencies $(foreach proj, $(COFFEE), $(proj))
+	./bin/dependencies $(foreach proj, $(COFFEE), $(proj))
 
 clean:
 	-\rm -r $(foreach proj, $(PROJECTS), $(DEST)$(proj)/)
@@ -15,4 +15,4 @@ clean:
 	-\rm $(foreach proj, $(COFFEE), $(proj)/index.html)
 
 build: 
-	./compile-coffee $(foreach proj, $(COFFEE), $(proj))
+	./bin/compile-coffee $(foreach proj, $(COFFEE), $(proj))

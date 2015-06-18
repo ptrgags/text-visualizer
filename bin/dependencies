@@ -5,7 +5,7 @@ TEMPLATE=$1/src/index.html.template
 INDEX=$1/index.html
 
 cp $TEMPLATE $INDEX
-cat $SCRIPTS | awk -f scripts.awk > scripts.tmp
+cat $SCRIPTS | awk -f ./bin/scripts.awk > scripts.tmp
 
 sed -e "/::SCRIPTS::/r scripts.tmp" -e "/::SCRIPTS::/d" $TEMPLATE > $INDEX
 
